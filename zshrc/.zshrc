@@ -1,24 +1,47 @@
-# Created by newuser for 5.9
+# Set the REPOS variable to the path where your Git repositories will be stored
+REPOS=~/.repos
 
-# Download Znap, if it's not there yet.
-[[ -r ~/Repos/znap/znap.zsh ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git ~/Repos/znap
-source ~/Repos/znap/znap.zsh  # Start Znap
+# Create the repository directory if it doesn't exist
+mkdir -p $REPOS
 
-[[ -r ~/Repos/marlonrichert/zsh-autocomplete/zsh-autocomplete.plugin.zsh ]] ||
-	znap install marlonrichert/zsh-autocomplete
-source ~/Repos/marlonrichert/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# Install Znap, a Zsh plugin manager
+if ! [[ -r $REPOS/znap ]]; then
+  git clone --depth 1 -- https://github.com/marlonrichert/zsh-snap.git $REPOS/znap
+fi
+source $REPOS/znap/znap.zsh
 
+# Install zsh-autocomplete, a Zsh plugin for auto-completion
+if ! [[ -r $REPOS/marlonrichert/zsh-autocomplete ]]; then
+  znap install marlonrichert/zsh-autocomplete
+fi
+source $REPOS/marlonrichert/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
+# Check if Starship is installed, and install it if not
+if ! [[ -r /usr/local/bin/starship ]]; then
+  curl -sS https://starship.rs/install.sh | sh
+fi
+
+# Initialize Starship, a shell prompt theme
+eval "$(starship init zsh)"
+
+
+# Check if Zoxide is installed, and install it if not
+if ! [[ -r ~/.local/bin/zoxide ]]; then
+  curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+fi
+
+# Initialize Zoxide, a Zsh plugin for navigating directories
+eval "$(zoxide init zsh --cmd cd)"
+
+
+# Set the PATH variable to include the .local/bin and bin directories
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+  PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 export PATH
 
-eval "$(starship init zsh)"
-
-eval "$(zoxide init zsh --cmd cd)"
-
+# Define some aliases
 alias ll="ls -al"
 alias rm="trash"
 alias shx="sudo hx"
+
