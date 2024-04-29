@@ -30,15 +30,13 @@ if ! [[ -r ~/.local/bin/zoxide ]]; then
   curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
 fi
 
-# Initialize Zoxide, a Zsh plugin for navigating directories
-eval "$(zoxide init zsh --cmd cd)"
-
-
 # Set the PATH variable to include the .local/bin and bin directories
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
   PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
 export PATH
+
+eval "$(zoxide init --cmd cd zsh)"
 
 # Define some aliases
 alias ll="ls -al"
