@@ -41,5 +41,15 @@ eval "$(zoxide init --cmd cd zsh)"
 # Define some aliases
 alias ll="ls -al"
 alias rm="trash"
-alias shx="sudo hx"
+alias neofetch=fastfetch
+
+if ! [[ -r /bin/hx ]]; then
+  alias hx=helix
+  alias shx="sudo helix"
+elif ! [[ -r ~/.local/bin/hx ]] then
+  alias hx=helix
+  alias shx="sudo helix"
+else
+  alias shx="sudo hx"
+fi
 
