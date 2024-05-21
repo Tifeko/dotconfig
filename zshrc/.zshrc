@@ -52,8 +52,10 @@ elif [[ -r $HOME/.local/bin/eza ]] then
   fi
   export export FPATH="$REPOS/eza/completions/zsh:$FPATH"
 else 
-  curl https://raw.githubusercontent.com/Tifeko/install_scripts/main/eza.sh | bash
-  fi
+  curl https://raw.githubusercontent.com/Tifeko/install_scripts/main/eza.sh -o eza.sh
+  chmod +x eza.sh
+  ./eza.sh
+fi
 
 alias ll="ls -al"
 if [[ -r /bin/trash ]] then
@@ -77,14 +79,22 @@ elif [[ -r ~/.local/bin/xsel ]] then
   alias pbpaste='xsel --output --clipboard'
 fi
 
-if ! [[ -r /bin/hx ]]; then
-  alias hx=helix
-  alias shx="sudo helix"
-elif ! [[ -r ~/.local/bin/hx ]] then
-  alias hx=helix
-  alias shx="sudo helix"
-else
+if [[ -r /bin/hx ]]; then
+  alias helix=hx
   alias shx="sudo hx"
+elif [[ -r ~/.local/bin/hx ]]; then
+  alias helix=hx
+  alias shx="sudo hx"
+elif [[ -r /bin/helix ]]; then
+  alias helix=hx
+  alias shx="sudo helix"
+elif [[ -r ~/.local/bin/helix ]]; then
+  alias helix=hx
+  alias shx="sudo hx"
+else
+  curl https://raw.githubusercontent.com/Tifeko/install_scripts/main/helix.sh -o helix.sh
+  chmod +x helix.sh
+  ./helix.sh
 fi
 
 if [[ -r /bin/bat ]]; then
