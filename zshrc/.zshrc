@@ -39,9 +39,18 @@ export PATH
 eval "$(zoxide init --cmd cd zsh)"
 
 # Define some aliases
+alias ls="eza"
 alias ll="ls -al"
 alias rm="trash"
-alias neofetch=fastfetch
+alias cls=clear
+alias ff="find . | grep"
+if [[ -r /bin/xsel ]] then
+  alias pbcopy='xsel --input --clipboard'
+  alias pbpaste='xsel --output --clipboard'
+elif [[ -r ~/.local/bin/xsel ]] then
+  alias pbcopy='xsel --input --clipboard'
+  alias pbpaste='xsel --output --clipboard'
+fi
 
 if ! [[ -r /bin/hx ]]; then
   alias hx=helix
@@ -53,3 +62,17 @@ else
   alias shx="sudo hx"
 fi
 
+if [[ -r /bin/bat ]]; then
+  alias cat=bat
+elif [[ -r ~/.local/bin/bat ]] then
+  alias cat=bat
+elif [[ -r /bin/batcat ]] then
+  alias cat=batcat
+elif [[ -r ~/.local/bin/batcat ]] then
+  alias cat=batcat
+fi
+
+if [[ -r /bin/fastfetch ]] then
+  fastfetch
+  alias neofetch=fastfetch
+fi
