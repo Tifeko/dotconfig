@@ -39,9 +39,34 @@ export PATH
 eval "$(zoxide init --cmd cd zsh)"
 
 # Define some aliases
-alias ls="eza"
+if [[ -r /bin/eza ]] then
+  alias ls="eza"
+  if ! [[ -r $REPOS/eza ]] then
+    git clone https://github.com/eza-community/eza.git $REPOS/eza
+  fi
+  export FPATH="$REPOS/eza/completions/zsh:$FPATH"
+elif [[ -r $HOME/.local/bin/eza ]] then
+  alias ls="eza"
+  if ! [[ -r $REPOS/eza ]] then
+    git clone https://github.com/eza-community/eza.git $REPOS/eza
+  fi
+  export export FPATH="$REPOS/eza/completions/zsh:$FPATH"
+else 
+  curl https://raw.githubusercontent.com/Tifeko/install_scripts/main/eza.sh | bash
+  fi
+
 alias ll="ls -al"
-alias rm="trash"
+if [[ -r /bin/trash ]] then
+  alias rm="trash"
+elif [[ -r ~/.local/bin/trash ]] then
+  alias rm="trash"
+else
+  cd /tmp
+  curl https://raw.githubusercontent.com/Tifeko/install_scripts/main/trash-cli.sh -o trash-cli.sh
+  chmod +x trash-cli.sh
+  ./trash-cli.sh
+  cd $HOME
+fi
 alias cls=clear
 alias ff="find . | grep"
 if [[ -r /bin/xsel ]] then
