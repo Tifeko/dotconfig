@@ -31,22 +31,42 @@ if ! [[ -r ~/.local/bin/zoxide ]]; then
 fi
 
 # Set the PATH variable to include the .local/bin and bin directories
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
-  PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:$HOME/go/bin:" ]]; then
+  PATH="$HOME/.local/bin:$HOME/bin:$HOME/go/bin/:$PATH"
 fi
 export PATH
 
 eval "$(zoxide init --cmd cd zsh)"
 
+if [[ -r ~/.local/bin/atuin ]]; then
+  # do not run this as root, root will be asked for if required
+  eval "$(atuin init zsh)"
+elif [[ -r ~/bin/atuin ]]; then
+  # do not run this as root, root will be asked for if required
+  eval "$(atuin init zsh)"
+elif [[ -r /bin/atuin ]]; then
+  # do not run this as root, root will be asked for if required
+  eval "$(atuin init zsh)"
+else
+  # bash/zsh/etc
+  bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+  atuin login
+  atuin import auto
+  atuin sync 
+fi 
+
+
+
+
 # Define some aliases
 if [[ -r /bin/eza ]] then
-  alias ls="eza"
+  alias ls="eza --icons"
   if ! [[ -r $REPOS/eza ]] then
     git clone https://github.com/eza-community/eza.git $REPOS/eza
   fi
   export FPATH="$REPOS/eza/completions/zsh:$FPATH"
 elif [[ -r $HOME/.local/bin/eza ]] then
-  alias ls="eza"
+  alias ls="eza --icons"
   if ! [[ -r $REPOS/eza ]] then
     git clone https://github.com/eza-community/eza.git $REPOS/eza
   fi
@@ -57,7 +77,27 @@ else
   ./eza.sh
 fi
 
+function hb {
+    if [ $# -eq 0 ]; then
+        echo "No file path specified."
+        return
+    elif [ ! -f "$1" ]; then
+        echo "File path does not exist."
+        return
+    fi
+
+    uri="http://bin.christitus.com/documents"
+    response=$(curl -s -X POST -d "$(cat "$1")" "$uri")
+    if [ $? -eq 0 ]; then
+        hasteKey=$(echo $response | jq -r '.key')
+        echo "http://bin.christitus.com/$hasteKey"
+    else
+        echo "Failed to upload the document."
+    fi
+}
+
 alias ll="ls -al"
+alias l="ls -a"
 if [[ -r /bin/trash ]] then
   alias rm="trash"
 elif [[ -r ~/.local/bin/trash ]] then
@@ -86,11 +126,11 @@ elif [[ -r ~/.local/bin/hx ]]; then
   alias helix=hx
   alias shx="sudo hx"
 elif [[ -r /bin/helix ]]; then
-  alias helix=hx
+  alias hx=helix
   alias shx="sudo helix"
 elif [[ -r ~/.local/bin/helix ]]; then
-  alias helix=hx
-  alias shx="sudo hx"
+  alias hx=helix
+  alias shx="sudo helix"
 else
   curl https://raw.githubusercontent.com/Tifeko/install_scripts/main/helix.sh -o helix.sh
   chmod +x helix.sh
