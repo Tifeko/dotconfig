@@ -53,7 +53,7 @@ else
   atuin login
   atuin import auto
   atuin sync 
-fi 
+fi
 
 
 
