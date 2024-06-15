@@ -95,9 +95,14 @@ function hb {
         echo "Failed to upload the document."
     fi
 }
+# if using kitty use kitty +kitten ssh
+if [[ "$TERM" == "xterm-kitty" ]] then
+  alias ssh='kitty +kitten ssh'
+fi
 
 alias ll="ls -al"
 alias l="ls -a"
+alias grep='grep --color'
 if [[ -r /bin/trash ]] then
   alias rm="trash"
 elif [[ -r ~/.local/bin/trash ]] then
