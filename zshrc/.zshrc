@@ -156,3 +156,4 @@ if [[ -r /bin/fastfetch ]] then
   fastfetch
   alias neofetch=fastfetch
 fi
+if [ -f "/home/tijnk/.config/fabric/fabric-bootstrap.inc" ]; then . "/home/tijnk/.config/fabric/fabric-bootstrap.inc"; fi
