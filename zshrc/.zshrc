@@ -31,8 +31,8 @@ if ! [[ -r ~/.local/bin/zoxide ]]; then
 fi
 
 # Set the PATH variable to include the .local/bin and bin directories
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:$HOME/go/bin:" ]]; then
-  PATH="$HOME/.local/bin:$HOME/bin:$HOME/go/bin/:$PATH"
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:$HOME/go/bin:/.local/share/gem/ruby/3.0.0/bin:" ]]; then
+  PATH="$HOME/.local/bin:$HOME/bin:$HOME/go/bin/:$HOME/.local/share/gem/ruby/3.0.0/bin:$HOME/.gem/bin:$PATH"
 fi
 export PATH
 
